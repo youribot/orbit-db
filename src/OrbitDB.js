@@ -7,12 +7,12 @@ const EventStore    = require('orbit-db-eventstore');
 const FeedStore     = require('orbit-db-feedstore');
 const KeyValueStore = require('orbit-db-kvstore');
 const CounterStore  = require('orbit-db-counterstore');
-const PubSub        = require('./PubSub');
+const PubSub        = require('orbit-message-broker');
 
 class OrbitDB {
-  constructor(ipfs) {
+  constructor(ipfs, options) {
     this._ipfs = ipfs;
-    this._pubsub = null;
+    this._pubsub = options && options.broker;
     this.user = null;
     this.network = null;
     this.events = new EventEmitter();
@@ -172,10 +172,10 @@ class OrbitDB {
               .catch((e) => {
                 logger.warn(".cat - no api or content found, using mock")
                 resolve(JSON.stringify({
-                  // name: 'localhost dev network',
-                  name: 'Orbit DEV Network',
-                  // publishers: ['localhost:3333']
-                  publishers: ['178.62.241.75:3333']
+                  name: 'localhost dev network',
+                  // name: 'Orbit DEV Network',
+                  publishers: ['localhost:3333']
+                  // publishers: ['178.62.241.75:3333']
                 }));
               });
           });
@@ -191,7 +191,9 @@ class OrbitDB {
         port = this.network.publishers[0].split(":")[1];
       })
       .then(() => {
-        this._pubsub = new PubSub();
+        if(!this._pubsub)
+          return Promise.resolve();
+
         logger.debug(`Connecting to network ${hash} (${host}:${port})`);
         return this._pubsub.connect(host, port, username, password)
       })
