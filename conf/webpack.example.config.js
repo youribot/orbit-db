@@ -13,10 +13,10 @@ module.exports = {
     Buffer: true
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: false,
-      compress: { warnings: false }
-    })
+    // new webpack.optimize.UglifyJsPlugin({
+    //   mangle: false,
+    //   compress: { warnings: false }
+    // })
   ],
   resolve: {
     modules: [
@@ -24,6 +24,8 @@ module.exports = {
     ],
     alias: {
       'fs': path.join(__dirname, '../node_modules', 'html5-fs'),
+      http: require.resolve('stream-http'),
+      https: require.resolve('https-browserify'),
     }
   },
   module: {
@@ -39,7 +41,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        include: /node_modules\/(hoek|qs|wreck|boom|ipfs.+|orbit.+|logplease|crdts|promisify-es|whatwg-fetch|node-fetch|isomorphic-fetch|db\.js)/,
+        include: /node_modules\/(hoek|qs|wreck|boom|ipfs-.+|orbit|logplease|crdts|promisify-es|whatwg-fetch|node-fetch|isomorphic-fetch|db\.js)/,
         loader: 'babel',
         query: {
           presets: require.resolve('babel-preset-es2015'),
