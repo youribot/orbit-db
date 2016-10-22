@@ -32,9 +32,14 @@ class Cache {
         fs.exists(cacheFile, (res) => {
           if(res) {
             fs.readFile(cacheFile, (err, res) => {
-              cache = JSON.parse(res)
-              // console.log("cache:", cache)
-              resolve()
+              try {
+                // console.log("cache:", res.toString())
+                cache = JSON.parse(res.toString())
+              } catch(e) {
+              } finally {
+                resolve()
+              }
+
             })
           } else {
             // console.log("cache file doesn't exist")

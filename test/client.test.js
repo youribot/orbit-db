@@ -44,7 +44,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Add events', function() {
       beforeEach(() => {
-        db = client.eventlog(channel, { subscribe: false })
+        db = client.eventlog(channel, { subscribe: false, maxHistory: 0 })
         db.delete()
       })
 
@@ -95,7 +95,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Delete events (Feed)', function() {
       beforeEach(() => {
-        db = client.feed(channel, { subscribe: false })
+        db = client.feed(channel, { subscribe: false, maxHistory: 0 })
         db.delete()
       })
 
@@ -135,7 +135,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
       beforeEach(async(() => {
         items = []
-        db = client.eventlog(channel, { subscribe: false })
+        db = client.eventlog(channel, { subscribe: false, maxHistory: 0 })
         db.delete()
         for(let i = 0; i < itemCount; i ++) {
           const hash = await(db.add('hello' + i))
@@ -438,7 +438,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Key-Value Store', function() {
       beforeEach(() => {
-        db = client.kvstore(channel, { subscribe: false })
+        db = client.kvstore(channel, { subscribe: false, maxHistory: 0 })
         db.delete()
       })
 
@@ -528,7 +528,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Document Store - default index \'_id\'', function() {
       beforeEach(() => {
-        db = client.docstore(channel, { subscribe: false })
+        db = client.docstore(channel, { subscribe: false, maxHistory: 0 })
         db.delete()
       })
 
@@ -590,7 +590,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Document Store - specified index', function() {
       beforeEach(() => {
-        db = client.docstore(channel, { subscribe: false, indexBy: 'doc' })
+        db = client.docstore(channel, { subscribe: false, indexBy: 'doc', maxHistory: 0 })
         db.delete()
       })
 

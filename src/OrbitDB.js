@@ -56,10 +56,12 @@ class OrbitDB {
   }
 
   /* Private methods */
-  _createStore(Store, dbname, options = { subscribe: true, cacheFile: 'orbit-db.json' }) {
-    const store = new Store(this._ipfs, this.user.id, dbname, options)
+  _createStore(Store, dbname, options) {
+    let opts = Object.assign({}, { subscribe: true, cacheFile: 'orbit-db.db' })
+    Object.assign(opts, options)    
+    const store = new Store(this._ipfs, this.user.id, dbname, opts)
     this.stores[dbname] = store
-    return this._subscribe(store, dbname, options.subscribe, options)
+    return this._subscribe(store, dbname, opts.subscribe, opts)
   }
 
   _subscribe(store, dbname, subscribe = true, options) {
