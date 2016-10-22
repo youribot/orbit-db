@@ -37,6 +37,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     after((done) => {
       if(db) db.delete()
+      fs.unlink('orbit-db.db')
       if(client) client.disconnect()
       if(client2) client2.disconnect()
       ipfsApi.stop().then(() => done())
