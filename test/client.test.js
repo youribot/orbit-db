@@ -591,7 +591,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Document Store - specified index', function() {
       beforeEach(() => {
-        db = client.docstore(channel, { subscribe: false, indexBy: 'doc' })
+        db = client.docstore(channel, { subscribe: false, indexBy: 'doc', maxHistory: 0 })
         db.delete()
       })
 
