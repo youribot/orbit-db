@@ -37,7 +37,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     after((done) => {
       if(db) db.delete()
-      fs.unlink('orbit-db.db')
+      fs.unlinkSync('orbit-db.db')
       if(client) client.disconnect()
       if(client2) client2.disconnect()
       ipfsApi.stop().then(() => done())
@@ -529,7 +529,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Document Store - default index \'_id\'', function() {
       beforeEach(() => {
-        db = client.docstore(channel, { subscribe: false, maxHistory: 0 })
+        db = client.docstore(channel, { subscribe: false })
         db.delete()
       })
 
@@ -591,7 +591,7 @@ IpfsApis.forEach(function(ipfsApi) {
 
     describe('Document Store - specified index', function() {
       beforeEach(() => {
-        db = client.docstore(channel, { subscribe: false, indexBy: 'doc', maxHistory: 0 })
+        db = client.docstore(channel, { subscribe: false, indexBy: 'doc' })
         db.delete()
       })
 
