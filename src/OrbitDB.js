@@ -11,37 +11,117 @@ const Cache         = require('./Cache')
 
 const defaultNetworkName = 'Orbit DEV Network'
 
+/**
+ * @class OrbitDB
+ * @param {IPFS} ipfs IPFS instance to use
+ * @param {string} [id='default'] User Id for this database
+ * @return {OrbitDB} An instance of OrbitDB
+ * @requires {@link http://github.com/ipfs/js-ipfs|IPFS}
+ * @requires {@link http://github.com/ipfs/js-ipfs-api|IPFS}
+ * @example
+    const orbitdb = new OrbitDB(ipfs, 'userId')
+ */
 class OrbitDB {
-  constructor(ipfs, id = 'default', options = {}) {
+  constructor(ipfs, id = 'default') {
     this._ipfs = ipfs
-    this._pubsub = options && options.broker ? new options.broker(ipfs) : new Pubsub(ipfs)
+    this._pubsub = new Pubsub(ipfs)
+    this.stores = {} // TODO make private
+
+    /**
+     * @readonly
+     * @type {object}
+     * @property {string} id User ID of this instance
+     */
     this.user = { id: id }
+
+    /**
+     * @readonly
+     * @type {object}
+     * @property {string} name Name of the network this instance is connected to
+     */
     this.network = { name: defaultNetworkName }
+
+    /**
+     * Events in OrbitDB are accessible via this EventEmitter.
+     * @readonly
+     * @type {EventEmitter}
+     * @example
+        orbitdb.events.on('data', (dbname, item) => ...)
+     */
     this.events = new EventEmitter()
-    this.stores = {}
   }
 
   /* Databases */
+
+  /**
+   * Get a Feed database instance
+   * 
+   * @param  {String} dbname Name of the database to use
+   * @param  {Object} options TODO
+   * @return {FeedStore} Feed database instance
+   * @see {@link FeedStore} for API documentation.
+   * @example
+   * const db = orbitdb.feed('posts')
+   */
   feed(dbname, options) {
     return this._createStore(FeedStore, dbname, options)
   }
 
+  /**
+   * Get an Eventlog database instance
+   * 
+   * @param  {String} dbname Name of the database to use
+   * @param  {Object} options TODO
+   * @return {EventStore} Eventlog database instance
+   * @example
+      const db = orbitdb.eventlog('visitors')
+   */
   eventlog(dbname, options) {
     return this._createStore(EventStore, dbname, options)
   }
 
+  /**
+   * Get a Key-Value database instance
+   * 
+   * @param  {String} dbname Name of the database to use
+   * @param  {Object} options TODO
+   * @return {KVStore} Key-Value database instance
+   * @example
+      const db = orbitdb.kvstore('profile')
+   */
   kvstore(dbname, options) {
     return this._createStore(KeyValueStore, dbname, options)
   }
 
+  /**
+   * Get a Counter database instance
+   * 
+   * @param  {String} dbname Name of the database to use
+   * @param  {Object} options TODO
+   * @return {CounterStore} Counter database instance
+   * @example
+      const db = orbitdb.counter('likes')
+   */
   counter(dbname, options) {
     return this._createStore(CounterStore, dbname, options)
   }
 
+  /**
+   * Get a Document database instance
+   * 
+   * @param  {String} dbname Name of the database to use
+   * @param  {Object} options TODO
+   * @return {DocStore} Document database instance
+   * @example
+      const db = orbitdb.docstore('books')
+   */
   docstore(dbname, options) {
     return this._createStore(DocumentStore, dbname, options)
   }
 
+  /**
+   * Disconnect from replication and shutdown OrbitDB
+   */
   disconnect() {
     if (this._pubsub) this._pubsub.disconnect()
     this.events.removeAllListeners('data')
@@ -105,6 +185,17 @@ class OrbitDB {
     Cache.set(dbname, hash)
   }
 
+  /**
+   * A new entry was added to the database
+   *
+   * @event data
+   * @param {String} dbname Name of the database where the new entry was added
+   * @param {Object} item Entry that was added
+   * @example
+   * orbitdb.events.on('data', (dbname, item) => {
+   *   console.log(dbname, item)
+   * })
+   */
   _onData(dbname, item) {
     // 'New database entry...', after a new entry was added to the database
     // console.log(".SYNCED", dbname, items.length)

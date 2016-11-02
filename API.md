@@ -111,7 +111,7 @@ After creating an instance of `orbitd-db`, you can now access the different data
 ### eventlog(name)
 
   Package: 
-  [orbit-db-eventlog](https://github.com/haadcode/orbit-db-eventlog)
+  [orbit-db-eventstore](https://github.com/haadcode/orbit-db-eventstore)
 
   ```javascript
   const db = orbitdb.eventlog('site.visitors')
@@ -149,7 +149,7 @@ After creating an instance of `orbitd-db`, you can now access the different data
 ### feed(name)
 
   Package: 
-  [orbit-db-feed](https://github.com/haadcode/orbit-db-feed)
+  [orbit-db-feedstore](https://github.com/haadcode/orbit-db-feedstore)
 
   ```javascript
   const db = orbitdb.feed('orbit-db.issues')
