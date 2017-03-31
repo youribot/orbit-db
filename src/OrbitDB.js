@@ -68,7 +68,7 @@ class OrbitDB {
     this.stores[dbname] = store
 
     if(opts.replicate && this._pubsub)
-      this._pubsub.subscribe(dbname, this._onMessage.bind(this))
+      this._pubsub.subscribe(dbname, this._onMessage.bind(this), this._onConnected.bind(this))
 
     return store
   }
@@ -93,6 +93,13 @@ class OrbitDB {
     if(heads && this._pubsub) {
       setTimeout(() => this._pubsub.publish(dbname, heads), 1000)
     }
+  }
+
+  _onConnected(dbname, peers) {
+    // console.log(".PEERS", dbname, peers)
+    const store = this.stores[dbname]
+    const heads = store._oplog.heads
+    setTimeout(() => this._pubsub.publish(dbname, heads), 1000)
   }
 }
 
