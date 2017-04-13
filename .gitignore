@@ -10,4 +10,7 @@ examples/browser/*.map
 examples/browser/lib
 dist/*.map
 orbit-db/
+.orbitdb/
 ipfs/
+orbit-db-feed-add/
+*.csv

@@ -14,12 +14,15 @@
   "browser": {
     "fs-pull-blob-store": "idb-pull-blob-store"
   },
+  "bin": { 
+    "orbitdb" : "./src/cli/bin.js"
+  },
   "main": "src/OrbitDB.js",
   "dependencies": {
     "libp2p-floodsub": "github:libp2p/js-libp2p-floodsub#orbit-floodsub",
     "logplease": "^1.2.12",
     "orbit-db-counterstore": "~0.2.0",
-    "orbit-db-docstore": "~0.2.0",
+    "orbit-db-docstore": "github:orbitdb/orbit-db-docstore#feat/cli",
     "orbit-db-eventstore": "~0.2.0",
     "orbit-db-feedstore": "~0.2.0",
     "orbit-db-kvstore": "~0.2.0",
