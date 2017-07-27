@@ -9,7 +9,7 @@
     "url": "https://github.com/haadcode/orbit-db"
   },
   "engines": {
-    "node": "^6.x.x"
+    "node": "^7.x.x"
   },
   "browser": {
     "fs-pull-blob-store": "idb-pull-blob-store"
